@@ -1,9 +1,7 @@
 using System;
-using System.Drawing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TRexRunner.Graphics;
-using NotImplementedException = System.NotImplementedException;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace TRexRunner.Entities;
