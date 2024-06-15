@@ -1,0 +1,137 @@
+@startuml
+class Game
+
+interface IGameEntity {
+    + int: DrawOrder
+    
+    + int getDrawOrder()
+    + void Update(GameTime time)
+    + void Draw(SpriteBatch batch, GameTime time)
+}
+
+TRexRunnerGame *--> EntityManager
+class TRexRunnerGame extends Game {
+    - EntityManager: _entityManager
+}
+
+class TRex implements IGameEntity {
+    + float: Speed
+    + bool: IsAlive
+    + TRexState: State
+    + Vector2: Position
+    
+    .. Getters and Setters ..
+    + float getSpeed()
+    + void setSpeed(float Speed)
+    + bool getIsAlive()
+    + TRexState getState()
+    
+    .. Interactions ..
+    + bool StartJump()
+    + bool CancelJump()
+    + bool Duck()
+    + bool Drop()
+    + bool Die()
+    + bool GetUp()
+}
+
+class ScoreBoard implements IGameEntity {
+    double: Score
+    int: DisplayScore
+    int: HighScore
+}
+
+class GroundManager implements IGameEntity
+
+abstract class Obstacle implements IGameEntity
+
+class CactusGroup extends Obstacle
+class FlyingDino extends Obstacle
+
+ObstacleManager -> Obstacle: Creates
+class ObstacleManager implements IGameEntity
+
+class SkyManager implements IGameEntity
+
+TRex -> TRexState
+enum TRexState {
+    Idle
+    Running
+    Ducking
+    Jumping
+    Falling
+}
+
+InputController o--> TRex: Controls
+class InputController {
+    - TRex: _tRex  
+    
+    + void ProcessControls(GameTime time)
+}
+
+
+EntityManager o--> IGameEntity
+class EntityManager {
+    - List: IGameEntity[] _gameEntities
+    
+    + void addEntity(IGameEntity: entity)
+    + void removeEntity(IGameEntity: entity)
+    + void clearEntities()
+    + void updateEntities(GameTime: time)
+    + void drawEntities(SpriteBatch: batch, GameTime: time)
+}
+
+class Sprite {
+    + Texture2D: Texture
+    + int: X
+    + int: Y
+    + int: Width
+    + int: Height
+    
+    .. Setters & Getters ..
+    + Texture getTexture()
+    - void setTexture(Texture2D: Texture)
+    + int getX()
+    + void setX(int X)
+    + int getY()
+    + void setY(int Y)
+    + int getWidth()
+    + void setWidth(int Width)
+    + int getHeight()
+    + void setHeight(int Height)
+    
+    .. Interactions ..
+    + void Draw(SpriteBatch batch)
+}
+
+SpriteAnimation *--> SpriteAnimationFrame
+class SpriteAnimation {
+    - List: SpriteAnimationFrame[] _frame
+    + bool: IsPlaying
+    + float: PlaybackProgress
+    
+    .. Getters & Setters ..
+    + bool getIsPlaying()
+    - void setIsPlaying(bool isPlaying)
+    + float getPlaybackProgress()
+    - void setPlaybackProgress(float progress)
+    
+    .. Interactions ..
+    + void AddFrame(Sprite: sprite, float: timestamp)
+    + void Update(GameTime time)
+    + void Play()
+    + void Stop()
+    + SpriteAnimationFrame getFrame(int: index)
+}
+
+SpriteAnimationFrame o--> Sprite
+class SpriteAnimationFrame {
+    + Sprite: Sprite
+    + float: TimeStamp
+    
+    .. Getters & Setters ..
+    Sprite getSprite()
+    void setSprite(Sprite sprite)
+    float getTimeStamp()
+}
+@enduml
